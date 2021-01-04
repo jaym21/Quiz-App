@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -13,13 +14,17 @@ import kotlinx.android.synthetic.main.activity_quiz_questions.*
 
 class QuizQuestions : AppCompatActivity(), View.OnClickListener {
 
-    private var mQuestionsList: ArrayList<Question> ?= null
+    private var mUserName: String? = null
+    private var mQuestionsList: ArrayList<Question>? = null
     private var mCurrentPosition: Int = 1
     private var mSelectedOptionPosition: Int = 0
+    private var mCorrectAnswers: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_questions)
+
+        mUserName = intent.getStringExtra(Constants.user_name)
 
         mQuestionsList = Constants.getQuestions()
         setQuestion()
@@ -34,8 +39,6 @@ class QuizQuestions : AppCompatActivity(), View.OnClickListener {
 
     //this function will put the current question and options for that question on the screen
     private fun setQuestion() {
-
-        val mCurrentPosition = 1
 
         if(mCurrentPosition == mQuestionsList!!.size) {
             //when we are at last question then changing button to finish
@@ -97,7 +100,15 @@ class QuizQuestions : AppCompatActivity(), View.OnClickListener {
                             setQuestion()
                         }else -> {
                             //if we are greater than no.of questions that means the quiz is completed
-                            Toast.makeText(this, "Completed" ,Toast.LENGTH_LONG).show()
+                            val intent = Intent(this, QuizResult::class.java)
+                            //passing the user's name to result activity where we need to display it
+                            intent.putExtra(Constants.user_name, mUserName)
+                            //passing no.of answers that were correct
+                            intent.putExtra(Constants.correct_answers, mCorrectAnswers)
+                            //passing total no.of questions
+                            intent.putExtra(Constants.total_questions, mQuestionsList!!.size)
+                            startActivity(intent)
+                            finish()
                         }
                     }
                 }else{ //when user has selected an option
@@ -107,6 +118,9 @@ class QuizQuestions : AppCompatActivity(), View.OnClickListener {
                     //when selected option is not correct one
                     if (question!!.correctOption != mSelectedOptionPosition) {
                         onSubmitView(mSelectedOptionPosition, R.drawable.wrong_option)
+                    }else{
+                        //if answer was correct
+                        mCorrectAnswers++
                     }
                     //even if wrong option is selected each time we need to highlight the correct option
                     onSubmitView(question.correctOption, R.drawable.correct_option)

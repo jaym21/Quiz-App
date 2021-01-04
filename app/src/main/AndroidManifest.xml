@@ -8,13 +8,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
-        <activity android:name=".QuizQuestions"
+        <activity android:name=".QuizResult"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheme"></activity>
+            android:theme="@style/NoActionBarTheme"/>
+        <activity
+            android:name=".QuizQuestions"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/NoActionBarTheme"
             android:screenOrientation="portrait"
+            android:theme="@style/NoActionBarTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

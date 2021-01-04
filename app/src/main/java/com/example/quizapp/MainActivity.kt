@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         btnStart.setOnClickListener {
             if (etName.text.toString().isNotEmpty()) {
                 val intent = Intent(this, QuizQuestions::class.java)
+                //sending the user's name to the next activity i.e QuizQuestions with user_name as id
+                intent.putExtra(Constants.user_name, etName.text.toString())
                 startActivity(intent)
                 finish()
             }else{
